@@ -1,5 +1,5 @@
 const express = require('express');
-const { readTalker } = require('./utils/read');
+const { readTalker, generateToken } = require('./utils/read');
 
 const app = express();
 
@@ -22,6 +22,12 @@ app.get('/talker/:id', async (req, res) => {
     return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
   }
   return res.status(200).json(talkerFiltered);
+});
+
+app.post('/login', async (req, res) => {
+  const tokenRandom = await generateToken();
+
+  return res.status(200).json({ token: tokenRandom });
 });
 
 // não remova esse endpoint, e para o avaliador funcionar

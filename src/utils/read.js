@@ -23,7 +23,17 @@ async function writeTalker(talkers) {
     }
 }
 
+async function generateToken() {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const tokenLength = 16;
+    const randomChars = Array.from({ length: tokenLength }, () => characters[
+        Math.floor(Math.random() * characters.length)]);
+    const token = randomChars.join('');
+    return token;
+}
+
 module.exports = {
+    generateToken,
     writeTalker,
     readTalker,
 };
