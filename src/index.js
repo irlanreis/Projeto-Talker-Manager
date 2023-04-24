@@ -59,6 +59,28 @@ app.post('/talker',
     return res.status(201).json(newTalker);
   });
 
+app.put('/talker/:id',
+  validateToken,
+  validateTalk,
+  validateWatcheAt,
+  validateRate,
+  validateAge,
+  validateName, async (req, res) => {
+    const { id } = req.params;
+    const talkerObjt = req.body;
+    const talkers = await readTalker();
+    const talkerId = talkers.find((talk) => talk.id === +id);
+    const talkerIndex = talkers.findIndex((talk) => talk.id === +id);
+
+    if (!talkerId) {
+      return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
+    }
+    const newTalker = { id: +id, ...talkerObjt };
+    talkers[talkerIndex] = newTalker;
+    await writeTalker(talkers);
+    return res.status(200).json(newTalker);
+  });
+
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
