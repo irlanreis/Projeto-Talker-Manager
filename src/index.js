@@ -1,5 +1,6 @@
 const express = require('express');
 const { readTalker, generateToken } = require('./utils/read');
+const validateLogin = require('./middlewares/validateLogin');
 
 const app = express();
 
@@ -24,7 +25,7 @@ app.get('/talker/:id', async (req, res) => {
   return res.status(200).json(talkerFiltered);
 });
 
-app.post('/login', async (req, res) => {
+app.post('/login', validateLogin, async (req, res) => {
   const tokenRandom = await generateToken();
 
   return res.status(200).json({ token: tokenRandom });
