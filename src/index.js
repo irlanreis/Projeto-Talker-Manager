@@ -16,6 +16,14 @@ app.use(express.json());
 const HTTP_OK_STATUS = 200;
 const PORT = process.env.PORT || '3001';
 
+app.get('/talker/search', validateToken, async (req, res) => {
+  const { q } = req.query;
+  const talkers = await readTalker();
+  const talkerSearch = talkers.filter((talk) => talk.name.toLowerCase().includes(q.toLowerCase()));
+  
+  return res.status(200).json(talkerSearch);
+});
+
 app.get('/talker', async (_req, res) => {
   const talkers = await readTalker();
   return res.status(200).json(talkers);
@@ -47,12 +55,10 @@ app.post('/talker',
   validateName, async (req, res) => {
     const talkerObjt = req.body;
     const talkers = await readTalker();
-    console.log(talkerObjt);
     const newTalker = {
       id: talkers.length + 1,
       ...talkerObjt,
     };
-    console.log(newTalker);
 
     talkers.push(newTalker);
     await writeTalker(talkers);
